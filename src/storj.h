@@ -9,16 +9,20 @@
 #ifndef STORJ_H
 #define STORJ_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #ifdef _WIN32
 #    ifdef DLL_EXPORT
 #        define LIBRARY_API __declspec(dllexport)
 #    else
 #        define LIBRARY_API __declspec(dllimport)
 #    endif
+#endif
+
+#ifndef LIBRARY_API
+#define LIBRARY_API
+#endif
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 #include <assert.h>
@@ -116,9 +120,9 @@ extern "C" {
 #define STORJ_HTTP_TIMEOUT 60L
 
 typedef struct {
-  uint8_t *encryption_ctr;
-  uint8_t *encryption_key;
-  struct aes256_ctx *ctx;
+    uint8_t *encryption_ctr;
+    uint8_t *encryption_key;
+    struct aes256_ctx *ctx;
 } storj_encryption_ctx_t ;
 
 typedef enum {
@@ -535,10 +539,10 @@ typedef struct {
  * @param[in] log_options - Logging settings
  * @return A null value on error, otherwise a storj_env pointer.
  */
-storj_env_t *storj_init_env(storj_bridge_options_t *options,
-                            storj_encrypt_options_t *encrypt_options,
-                            storj_http_options_t *http_options,
-                            storj_log_options_t *log_options);
+LIBRARY_API storj_env_t *storj_init_env(storj_bridge_options_t *options,
+                                        storj_encrypt_options_t *encrypt_options,
+                                        storj_http_options_t *http_options,
+                                        storj_log_options_t *log_options);
 
 
 /**
@@ -551,7 +555,7 @@ storj_env_t *storj_init_env(storj_bridge_options_t *options,
  *
  * @param [in] env
  */
-int storj_destroy_env(storj_env_t *env);
+LIBRARY_API int storj_destroy_env(storj_env_t *env);
 
 /**
  * @brief Will encrypt and write options to disk
@@ -566,11 +570,11 @@ int storj_destroy_env(storj_env_t *env);
  * @param[in] mnemonic - The file encryption mnemonic
  * @return A non-zero value on error, zero on success.
  */
-int storj_encrypt_write_auth(const char *filepath,
-                             const char *passhrase,
-                             const char *bridge_user,
-                             const char *bridge_pass,
-                             const char *mnemonic);
+LIBRARY_API int storj_encrypt_write_auth(const char *filepath,
+                                         const char *passhrase,
+                                         const char *bridge_user,
+                                         const char *bridge_pass,
+                                         const char *mnemonic);
 
 
 /**
@@ -586,11 +590,11 @@ int storj_encrypt_write_auth(const char *filepath,
  * @param[out] buffer - The destination buffer
  * @return A non-zero value on error, zero on success.
  */
-int storj_encrypt_auth(const char *passhrase,
-                       const char *bridge_user,
-                       const char *bridge_pass,
-                       const char *mnemonic,
-                       char **buffer);
+LIBRARY_API int storj_encrypt_auth(const char *passhrase,
+                                   const char *bridge_user,
+                                   const char *bridge_pass,
+                                   const char *mnemonic,
+                                   char **buffer);
 
 /**
  * @brief Will read and decrypt options from disk
@@ -605,11 +609,11 @@ int storj_encrypt_auth(const char *passhrase,
  * @param[out] mnemonic - The file encryption mnemonic
  * @return A non-zero value on error, zero on success.
  */
-int storj_decrypt_read_auth(const char *filepath,
-                            const char *passphrase,
-                            char **bridge_user,
-                            char **bridge_pass,
-                            char **mnemonic);
+LIBRARY_API int storj_decrypt_read_auth(const char *filepath,
+                                        const char *passphrase,
+                                        char **bridge_user,
+                                        char **bridge_pass,
+                                        char **mnemonic);
 
 /**
  * @brief Will decrypt options
@@ -624,18 +628,18 @@ int storj_decrypt_read_auth(const char *filepath,
  * @param[out] mnemonic - The file encryption mnemonic
  * @return A non-zero value on error, zero on success.
  */
-int storj_decrypt_auth(const char *buffer,
-                       const char *passphrase,
-                       char **bridge_user,
-                       char **bridge_pass,
-                       char **mnemonic);
+LIBRARY_API int storj_decrypt_auth(const char *buffer,
+                                   const char *passphrase,
+                                   char **bridge_user,
+                                   char **bridge_pass,
+                                   char **mnemonic);
 
 /**
  * @brief Will get the current unix timestamp in milliseconds
  *
  * @return A unix timestamp
  */
-uint64_t storj_util_timestamp();
+LIBRARY_API uint64_t storj_util_timestamp();
 
 /**
  * @brief Will generate a new random mnemonic
@@ -647,7 +651,7 @@ uint64_t storj_util_timestamp();
  * @param[out] buffer - The destination of the mnemonic
  * @return A non-zero value on error, zero on success.
  */
-int storj_mnemonic_generate(int strength, char **buffer);
+LIBRARY_API int storj_mnemonic_generate(int strength, char **buffer);
 
 /**
  * @brief Will check that a mnemonic is valid
@@ -658,7 +662,7 @@ int storj_mnemonic_generate(int strength, char **buffer);
  * @param[in] strength - The bits of entropy
  * @return Will return true on success and false failure
  */
-bool storj_mnemonic_check(const char *mnemonic);
+LIBRARY_API bool storj_mnemonic_check(const char *mnemonic);
 
 /**
  * @brief Get the error message for an error code
@@ -669,7 +673,7 @@ bool storj_mnemonic_check(const char *mnemonic);
  * @param[in] error_code The storj error code integer
  * @return A char pointer with error message
  */
-char *storj_strerror(int error_code);
+LIBRARY_API char *storj_strerror(int error_code);
 
 /**
  * @brief Get Storj bridge API information.
@@ -683,9 +687,9 @@ char *storj_strerror(int error_code);
  * @param[in] cb A function called with response when complete
  * @return A non-zero error value on failure and 0 on success.
  */
-int storj_bridge_get_info(storj_env_t *env,
-                          void *handle,
-                          uv_after_work_cb cb);
+LIBRARY_API int storj_bridge_get_info(storj_env_t *env,
+                                      void *handle,
+                                      uv_after_work_cb cb);
 
 /**
  * @brief List available buckets for a user.
@@ -695,16 +699,16 @@ int storj_bridge_get_info(storj_env_t *env,
  * @param[in] cb A function called with response when complete
  * @return A non-zero error value on failure and 0 on success.
  */
-int storj_bridge_get_buckets(storj_env_t *env,
-                             void *handle,
-                             uv_after_work_cb cb);
+LIBRARY_API int storj_bridge_get_buckets(storj_env_t *env,
+                                         void *handle,
+                                         uv_after_work_cb cb);
 
 /**
  * @brief Will free all structs for get buckets request
  *
  * @param[in] req - The work request from storj_bridge_get_buckets callback
  */
-void storj_free_get_buckets_request(get_buckets_request_t *req);
+LIBRARY_API void storj_free_get_buckets_request(get_buckets_request_t *req);
 
 /**
  * @brief Create a bucket.
@@ -715,10 +719,10 @@ void storj_free_get_buckets_request(get_buckets_request_t *req);
  * @param[in] cb A function called with response when complete
  * @return A non-zero error value on failure and 0 on success.
  */
-int storj_bridge_create_bucket(storj_env_t *env,
-                               const char *name,
-                               void *handle,
-                               uv_after_work_cb cb);
+LIBRARY_API int storj_bridge_create_bucket(storj_env_t *env,
+                                           const char *name,
+                                           void *handle,
+                                           uv_after_work_cb cb);
 
 /**
  * @brief Delete a bucket.
@@ -729,10 +733,10 @@ int storj_bridge_create_bucket(storj_env_t *env,
  * @param[in] cb A function called with response when complete
  * @return A non-zero error value on failure and 0 on success.
  */
-int storj_bridge_delete_bucket(storj_env_t *env,
-                               const char *id,
-                               void *handle,
-                               uv_after_work_cb cb);
+LIBRARY_API int storj_bridge_delete_bucket(storj_env_t *env,
+                                           const char *id,
+                                           void *handle,
+                                           uv_after_work_cb cb);
 
 /**
  * @brief Get a info of specific bucket.
@@ -743,10 +747,10 @@ int storj_bridge_delete_bucket(storj_env_t *env,
  * @param[in] cb A function called with response when complete
  * @return A non-zero error value on failure and 0 on success.
  */
-int storj_bridge_get_bucket(storj_env_t *env,
-                            const char *id,
-                            void *handle,
-                            uv_after_work_cb cb);
+LIBRARY_API int storj_bridge_get_bucket(storj_env_t *env,
+                                        const char *id,
+                                        void *handle,
+                                        uv_after_work_cb cb);
 
 /**
  * @brief Get a list of all files in a bucket.
@@ -757,17 +761,17 @@ int storj_bridge_get_bucket(storj_env_t *env,
  * @param[in] cb A function called with response when complete
  * @return A non-zero error value on failure and 0 on success.
  */
-int storj_bridge_list_files(storj_env_t *env,
-                            const char *id,
-                            void *handle,
-                            uv_after_work_cb cb);
+LIBRARY_API int storj_bridge_list_files(storj_env_t *env,
+                                        const char *id,
+                                        void *handle,
+                                        uv_after_work_cb cb);
 
 /**
  * @brief Will free all structs for list files request
  *
  * @param[in] req - The work request from storj_bridge_list_files callback
  */
-void storj_free_list_files_request(list_files_request_t *req);
+LIBRARY_API void storj_free_list_files_request(list_files_request_t *req);
 
 /**
  * @brief Create a PUSH or PULL bucket token.
@@ -779,11 +783,11 @@ void storj_free_list_files_request(list_files_request_t *req);
  * @param[in] cb A function called with response when complete
  * @return A non-zero error value on failure and 0 on success.
  */
-int storj_bridge_create_bucket_token(storj_env_t *env,
-                                     const char *bucket_id,
-                                     storj_bucket_op_t operation,
-                                     void *handle,
-                                     uv_after_work_cb cb);
+LIBRARY_API int storj_bridge_create_bucket_token(storj_env_t *env,
+                                                 const char *bucket_id,
+                                                 storj_bucket_op_t operation,
+                                                 void *handle,
+                                                 uv_after_work_cb cb);
 
 /**
  * @brief Get pointers with locations to file shards.
@@ -795,11 +799,11 @@ int storj_bridge_create_bucket_token(storj_env_t *env,
  * @param[in] cb A function called with response when complete
  * @return A non-zero error value on failure and 0 on success.
  */
-int storj_bridge_get_file_pointers(storj_env_t *env,
-                                   const char *bucket_id,
-                                   const char *file_id,
-                                   void *handle,
-                                   uv_after_work_cb cb);
+LIBRARY_API int storj_bridge_get_file_pointers(storj_env_t *env,
+                                               const char *bucket_id,
+                                               const char *file_id,
+                                               void *handle,
+                                               uv_after_work_cb cb);
 
 /**
  * @brief Delete a file in a bucket.
@@ -811,11 +815,11 @@ int storj_bridge_get_file_pointers(storj_env_t *env,
  * @param[in] cb A function called with response when complete
  * @return A non-zero error value on failure and 0 on success.
  */
-int storj_bridge_delete_file(storj_env_t *env,
-                             const char *bucket_id,
-                             const char *file_id,
-                             void *handle,
-                             uv_after_work_cb cb);
+LIBRARY_API int storj_bridge_delete_file(storj_env_t *env,
+                                         const char *bucket_id,
+                                         const char *file_id,
+                                         void *handle,
+                                         uv_after_work_cb cb);
 
 /**
  * @brief Create a file frame
@@ -825,9 +829,9 @@ int storj_bridge_delete_file(storj_env_t *env,
  * @param[in] cb A function called with response when complete
  * @return A non-zero error value on failure and 0 on success.
  */
-int storj_bridge_create_frame(storj_env_t *env,
-                              void *handle,
-                              uv_after_work_cb cb);
+LIBRARY_API int storj_bridge_create_frame(storj_env_t *env,
+                                          void *handle,
+                                          uv_after_work_cb cb);
 
 /**
  * @brief List available file frames
@@ -837,9 +841,9 @@ int storj_bridge_create_frame(storj_env_t *env,
  * @param[in] cb A function called with response when complete
  * @return A non-zero error value on failure and 0 on success.
  */
-int storj_bridge_get_frames(storj_env_t *env,
-                            void *handle,
-                            uv_after_work_cb cb);
+LIBRARY_API int storj_bridge_get_frames(storj_env_t *env,
+                                        void *handle,
+                                        uv_after_work_cb cb);
 
 /**
  * @brief Get information for a file frame
@@ -850,10 +854,10 @@ int storj_bridge_get_frames(storj_env_t *env,
  * @param[in] cb A function called with response when complete
  * @return A non-zero error value on failure and 0 on success.
  */
-int storj_bridge_get_frame(storj_env_t *env,
-                           const char *frame_id,
-                           void *handle,
-                           uv_after_work_cb cb);
+LIBRARY_API int storj_bridge_get_frame(storj_env_t *env,
+                                       const char *frame_id,
+                                       void *handle,
+                                       uv_after_work_cb cb);
 
 /**
  * @brief Delete a file frame
@@ -864,10 +868,10 @@ int storj_bridge_get_frame(storj_env_t *env,
  * @param[in] cb A function called with response when complete
  * @return A non-zero error value on failure and 0 on success.
  */
-int storj_bridge_delete_frame(storj_env_t *env,
-                              const char *frame_id,
-                              void *handle,
-                              uv_after_work_cb cb);
+LIBRARY_API int storj_bridge_delete_frame(storj_env_t *env,
+                                          const char *frame_id,
+                                          void *handle,
+                                          uv_after_work_cb cb);
 
 /**
  * @brief Get metadata for a file
@@ -879,11 +883,11 @@ int storj_bridge_delete_frame(storj_env_t *env,
  * @param[in] cb A function called with response when complete
  * @return A non-zero error value on failure and 0 on success.
  */
-int storj_bridge_get_file_info(storj_env_t *env,
-                               const char *bucket_id,
-                               const char *file_id,
-                               void *handle,
-                               uv_after_work_cb cb);
+LIBRARY_API int storj_bridge_get_file_info(storj_env_t *env,
+                                           const char *bucket_id,
+                                           const char *file_id,
+                                           void *handle,
+                                           uv_after_work_cb cb);
 
 /**
  * @brief Get mirror data for a file
@@ -895,11 +899,11 @@ int storj_bridge_get_file_info(storj_env_t *env,
  * @param[in] cb A function called with response when complete
  * @return A non-zero error value on failure and 0 on success.
  */
-int storj_bridge_list_mirrors(storj_env_t *env,
-                              const char *bucket_id,
-                              const char *file_id,
-                              void *handle,
-                              uv_after_work_cb cb);
+LIBRARY_API int storj_bridge_list_mirrors(storj_env_t *env,
+                                          const char *bucket_id,
+                                          const char *file_id,
+                                          void *handle,
+                                          uv_after_work_cb cb);
 
 /**
  * @brief Will cancel an upload
@@ -907,7 +911,7 @@ int storj_bridge_list_mirrors(storj_env_t *env,
  * @param[in] state A pointer to the the upload state
  * @return A non-zero error value on failure and 0 on success.
  */
-int storj_bridge_store_file_cancel(storj_upload_state_t *state);
+LIBRARY_API int storj_bridge_store_file_cancel(storj_upload_state_t *state);
 
 /**
  * @brief Upload a file
@@ -920,12 +924,12 @@ int storj_bridge_store_file_cancel(storj_upload_state_t *state);
  * @param[in] finished_cb Function called when download finished
  * @return A non-zero error value on failure and 0 on success.
  */
-int storj_bridge_store_file(storj_env_t *env,
-                            storj_upload_state_t *state,
-                            storj_upload_opts_t *opts,
-                            void *handle,
-                            storj_progress_cb progress_cb,
-                            storj_finished_upload_cb finished_cb);
+LIBRARY_API int storj_bridge_store_file(storj_env_t *env,
+                                        storj_upload_state_t *state,
+                                        storj_upload_opts_t *opts,
+                                        void *handle,
+                                        storj_progress_cb progress_cb,
+                                        storj_finished_upload_cb finished_cb);
 
 
 /**
@@ -934,7 +938,7 @@ int storj_bridge_store_file(storj_env_t *env,
  * @param[in] state A pointer to the the download state
  * @return A non-zero error value on failure and 0 on success.
  */
-int storj_bridge_resolve_file_cancel(storj_download_state_t *state);
+LIBRARY_API int storj_bridge_resolve_file_cancel(storj_download_state_t *state);
 
 /**
  * @brief Download a file
@@ -949,14 +953,14 @@ int storj_bridge_resolve_file_cancel(storj_download_state_t *state);
  * @param[in] finished_cb Function called when download finished
  * @return A non-zero error value on failure and 0 on success.
  */
-int storj_bridge_resolve_file(storj_env_t *env,
-                              storj_download_state_t *state,
-                              const char *bucket_id,
-                              const char *file_id,
-                              FILE *destination,
-                              void *handle,
-                              storj_progress_cb progress_cb,
-                              storj_finished_download_cb finished_cb);
+LIBRARY_API int storj_bridge_resolve_file(storj_env_t *env,
+                                          storj_download_state_t *state,
+                                          const char *bucket_id,
+                                          const char *file_id,
+                                          FILE *destination,
+                                          void *handle,
+                                          storj_progress_cb progress_cb,
+                                          storj_finished_download_cb finished_cb);
 
 /**
  * @brief Register a user
@@ -968,11 +972,11 @@ int storj_bridge_resolve_file(storj_env_t *env,
  * @param[in] cb A function called with response when complete
  * @return A non-zero error value on failure and 0 on success.
  */
-int storj_bridge_register(storj_env_t *env,
-                          const char *email,
-                          const char *password,
-                          void *handle,
-                          uv_after_work_cb cb);
+LIBRARY_API int storj_bridge_register(storj_env_t *env,
+                                      const char *email,
+                                      const char *password,
+                                      void *handle,
+                                      uv_after_work_cb cb);
 
 static inline char separator()
 {
@@ -986,5 +990,7 @@ static inline char separator()
 #ifdef __cplusplus
 }
 #endif
+
+#undef LIBRARY_API
 
 #endif /* STORJ_H */
