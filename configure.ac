@@ -2,7 +2,17 @@ AC_INIT([libstorj],[1.0.1])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([build-aux/m4])
 AM_INIT_AUTOMAKE([foreign])
-LT_INIT([shared static win32-dll])
+
+case $host in
+  *mingw*)
+       lt_cv_deplibs_check_method="pass_all"
+  ;;
+esac
+
+LT_INIT([pic-only])
+
+AX_GCC_FUNC_ATTRIBUTE([dllexport])
+AX_GCC_FUNC_ATTRIBUTE([dllimport])
 
 AC_PATH_PROG(HEXDUMP,hexdump)
 
