@@ -13,6 +13,14 @@
 extern "C" {
 #endif
 
+#ifdef _WIN32
+#    ifdef DLL_EXPORT
+#        define LIBRARY_API __declspec(dllexport)
+#    else
+#        define LIBRARY_API __declspec(dllimport)
+#    endif
+#endif
+
 #include <assert.h>
 #include <json-c/json.h>
 #include <stdlib.h>

@@ -83,7 +83,7 @@ define build_source
 	echo "====================================\n\n" && \
 	export PATH="$(TOOLCHAIN_BUILD_DIR)bin:${PATH}" && \
 	if test -f "./autogen.sh"; then ./autogen.sh; fi && \
-	$(build_env) $($(1)_config_env) ./configure --host="$(HOST)" $($(1)_config_opts) --enable-static --disable-shared --prefix=$(PREFIX_DIR) || exit && \
+	$(build_env) $($(1)_config_env) ./configure --host="$(HOST)" $($(1)_config_opts) --enable-static --disable-shared --with-pic --prefix=$(PREFIX_DIR) || exit && \
 	make || exit && \
 	make install || exit && \
 	cd "$(CURDIR)"
