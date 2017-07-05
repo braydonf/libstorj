@@ -6,10 +6,12 @@ AM_INIT_AUTOMAKE([foreign])
 case $host in
   *mingw*)
        lt_cv_deplibs_check_method="pass_all"
+       archive_cmds_CC="\$CC -shared \$libobjs \$deplibs \$compiler_flags -static -o \$output_objdir/\$soname \${wl}--enable-auto-image-base -Xlinker --out-implib -Xlinker \$lib"
+       postdeps_CC=
   ;;
 esac
 
-LT_INIT([pic-only])
+LT_INIT([shared static win32-dll])
 
 AX_GCC_FUNC_ATTRIBUTE([dllexport])
 AX_GCC_FUNC_ATTRIBUTE([dllimport])
@@ -71,3 +73,5 @@ else
 fi
 
 AC_OUTPUT
+
+sed -i '/^whole_archive_flag_spec=/s/"$/ \\${wl}-static"/' libtool
