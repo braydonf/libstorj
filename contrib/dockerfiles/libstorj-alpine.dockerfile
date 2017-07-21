@@ -30,8 +30,9 @@ RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases
     \
     apk del glibc-i18n && \
     \
-    chmod +x get_dep_ver.sh && \
-    ./get_dep_ver.sh && \
+    chmod +x get_dep_ver.sh
+
+RUN ./get_dep_ver.sh && \
     LIBSTORJ_VERSION=$(cat libstorj) && \
     wget https://github.com/Storj/libstorj/releases/download/v$LIBSTORJ_VERSION/libstorj-$LIBSTORJ_VERSION-linux64.tar.gz -O libstorj.tar.gz && \
     tar -zxvf libstorj.tar.gz && \
