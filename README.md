@@ -101,7 +101,7 @@ apt-get install gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64
 
 ```
 cd ./depends
-make HOST="x86_64-w64-mingw32" BUILD_DLL=1
+make HOST="x86_64-w64-mingw32"
 ```
 
 Configure command for libstorj-c:

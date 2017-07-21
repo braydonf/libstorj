@@ -13,11 +13,6 @@ $(package)_config_env_mingw32=PKG_CONFIG_LIBDIR="$(PREFIX_DIR)/lib/pkgconfig" CF
 $(package)_config_env_x86_64-w64-mingw32=$($(package)_config_env_mingw32)
 $(package)_config_env_i686-w64-mingw32=$($(package)_config_env_mingw32)
 
-# mingw dll specific settings
-ifeq ($(BUILD_DLL), 1)
-$(package)_config_env_x86_64-w64-mingw32=PKG_CONFIG_LIBDIR="$(PREFIX_DIR)/lib/pkgconfig" CFLAGS="-I$(PREFIX_DIR)include -L$(PREFIX_DIR)lib"
-endif
-
 # darwin specific settings
 $(package)_config_env_darwin=PKG_CONFIG_LIBDIR="$(PREFIX_DIR)/lib/pkgconfig"
 $(package)_config_env_x86_64-apple-darwin11=$($(package)_config_env_darwin)
