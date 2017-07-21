@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 MAINTAINER Storj Labs (bill@storj.io)
 
-ADD https://raw.githubusercontent.com/computeronix/libstorj/master/dockerfiles/get_dep_ver.sh get_dep_ver.sh
+ADD ./get_dep_ver.sh get_dep_ver.sh
 
 RUN apt-get update && \
     apt-get -y install wget && \

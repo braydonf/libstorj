@@ -2,8 +2,8 @@ FROM microsoft/nanoserver
 MAINTAINER Storj Labs (bill@storj.io)
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';"]
 
-ADD https://raw.githubusercontent.com/computeronix/libstorj/master/dockerfiles/get_dep_ver.ps1 get_dep_ver.ps1
-ADD https://raw.githubusercontent.com/computeronix/libstorj/master/dockerfiles/dst-root-ca-x3.cer dst-root-ca-x3.cer
+ADD ./get_dep_ver.ps1 get_dep_ver.ps1
+ADD ./dst-root-ca-x3.cer dst-root-ca-x3.cer
 
 RUN .\get_dep_ver.ps1; \
     Invoke-WebRequest $('https://github.com/Storj/libstorj/releases/download/v{0}/libstorj-{0}-win64.zip' -f $env:LIBSTORJ_VERSION) -OutFile 'libstorj.zip' -UseBasicParsing; \
